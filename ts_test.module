@@ -1,0 +1,72 @@
+<?php
+/**
+ * @file
+ * A module that creates a form page to add two numbers
+ */
+ 
+ /**
+ * Implements hook_menu().
+ * Navigation menu item to access addition page
+ */
+function ts_test_menu() {
+  $items['ts_test'] = array(
+    'title' => 'ThinkShout Test',
+    'type' => MENU_NORMAL_ITEM,
+    'description' => 'Add two numbers.',
+    'page callback' => 'drupal_get_form', //Use the form api to create the callback page
+    'page arguments' => array('ts_test_addition_form'),
+    'access arguments' => array('access content'),
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_form().
+ * Addition form for two numbers
+ */
+function ts_test_addition_form($form, &$form_state) {
+  $form['first_num'] = array(
+    '#type' => 'textfield',
+    '#title' => 'First Number',
+    '#size' => 10,
+    '#maxlength' => 50,
+    '#required' => TRUE,
+  );
+  $form['second_num'] = array(
+    '#type' => 'textfield',
+    '#title' => 'Second Number',
+    '#size' => 10,
+    '#maxlength' => 50,
+    '#required' => TRUE,
+  );
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => 'Add!',
+  );
+  return $form;
+}
+
+/**
+ * Validate addition form
+ */
+function ts_test_addition_form_validate($form, &$form_state) {
+  // Check that both textfields contain numbers.
+  if (! (is_numeric($form['first_num']['#value']))) {
+    form_set_error('first_num', 'Please enter a NUMBER into First Number field');
+  }
+  if (! (is_numeric($form['second_num']['#value']))) {
+    form_set_error('second_num', 'Please enter a NUMBER into Second Number field');
+  }
+  return $form;
+}
+
+/**
+ * Submit addition form
+ */
+function ts_test_addition_form_submit($form, &$form_state) {
+  // Add the two number fields
+  $first = $form['first_num']['#value'];
+  $second = $form['second_num']['#value'];
+  $sum = $first + $second;
+  drupal_set_message( t('Well, that worked well! Your total is: @sum', array('@sum' => $sum)));
+}

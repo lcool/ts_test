@@ -1,0 +1,3 @@
+name = ThinkShout Test	
+description = Module test for Thinkshout - creates an addition form page
+core = 7.x
